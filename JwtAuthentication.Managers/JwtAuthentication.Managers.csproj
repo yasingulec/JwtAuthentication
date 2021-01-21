@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JwtAuthentication.Core\JwtAuthentication.Core.csproj" />
+    <ProjectReference Include="..\JwtAuthentication.Data\JwtAuthentication.Data.csproj" />
+    <ProjectReference Include="..\JwtAuthentication.Entities\JwtAuthentication.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
