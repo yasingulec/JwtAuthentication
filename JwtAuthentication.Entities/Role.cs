@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace JwtAuthentication.Entities
 {
-    public class User : BaseEntity
+   public class Role:BaseEntity
     {
         public string Name { get; set; }
-        public string Surname { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
         public List<UserRole> UserRoles { get; set; }
+
     }
 }

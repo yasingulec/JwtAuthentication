@@ -19,7 +19,7 @@ namespace JwtAuthentication.Data.Repositories.Concrete
 
         public async Task<User> Authenticate(string username, string password)
         {
-          return await _ctx.Users.FirstOrDefaultAsync(x => x.UserName == username && x.Password == password);
+          return await _ctx.Users.Include(x=>x.UserRoles).ThenInclude(x=>x.Role).FirstOrDefaultAsync(x => x.UserName == username && x.Password == password);
         }
     }
 }

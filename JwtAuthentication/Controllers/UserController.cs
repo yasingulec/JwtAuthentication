@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -25,6 +26,7 @@ namespace JwtAuthentication.Controllers
             _configuration = configuration;
 
         }
+        [Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -38,7 +40,8 @@ namespace JwtAuthentication.Controllers
             var user = await _userRepository.Authenticate(auth.UserName, auth.Password);
             if (user == null)
                 return BadRequest();
-            var claims = new[] {
+
+            var claims = new List<Claim>{
                     new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
@@ -47,7 +50,10 @@ namespace JwtAuthentication.Controllers
                     new Claim("Surname", user.Surname),
                     new Claim("UserName", user.UserName),
                    };
-
+            foreach (var item in user.UserRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, item.Role.Name));
+            }
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
